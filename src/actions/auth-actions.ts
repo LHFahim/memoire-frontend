@@ -1,7 +1,7 @@
 "use server";
 
 import { ILoginResponse, ILoginState } from "@/interfaces/auth.interface";
-import { clearAuthCookies } from "@/libs/auth.lib";
+import { clearAuthCookies } from "@/lib/auth.lib";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 

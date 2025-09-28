@@ -1,0 +1,27 @@
+// app/(app)/layout.tsx
+import { AppSidebar } from "@/components/app-sidebar";
+import { SiteHeader } from "@/components/site-header";
+import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+
+export default function AppLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <SidebarProvider
+      style={
+        {
+          // keep the same CSS vars you used on the page
+          "--sidebar-width": "calc(var(--spacing) * 72)",
+          "--header-height": "calc(var(--spacing) * 12)",
+        } as React.CSSProperties
+      }
+    >
+      <AppSidebar variant="inset" />
+      <SidebarInset>
+        <SiteHeader />
+        <div className="flex min-h-screen flex-1 flex-col">
+          {/* every page under (app) renders here */}
+          {children}
+        </div>
+      </SidebarInset>
+    </SidebarProvider>
+  );
+}
