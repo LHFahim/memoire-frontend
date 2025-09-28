@@ -23,14 +23,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
-      <head>{/* <ColorSchemeScript /> */}</head>
-      <body>
-        {/* <MantineProvider forceColorScheme="dark"> */}
-        {children}
-
-        {/* </MantineProvider> */}
-      </body>
+    <html lang="en" className="h-full">
+      <body className="h-full bg-stone-50 text-stone-800">{children}</body>
     </html>
   );
 }

@@ -1,6 +1,9 @@
 "use server";
 
 import { ILoginResponse, ILoginState } from "@/interfaces/auth.interface";
+import { clearAuthCookies } from "@/libs/auth.lib";
+import { cookies } from "next/headers";
+import { redirect } from "next/navigation";
 
 export const loginAction = async (
   prevState: ILoginState,
@@ -28,14 +31,55 @@ export const loginAction = async (
     body: JSON.stringify({ email, password }),
   });
 
-  const data: ILoginResponse = await res.json();
-  console.log("🚀 ~ loginAction ~ data:", data);
+  if (!res.ok) {
+    return {
+      ok: false,
+      message: "Invalid credentials",
+      errors: { email: "Invalid credentials" },
+    };
+  }
 
-  // redirect("/dashboard");
+  const data: ILoginResponse = await res.json();
+
+  // createAuthCookies(data);
+  const jar = await cookies();
+
+  jar.set("access_token", data.access_token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 30 * 24 * 60 * 60,
+  });
+
+  jar.set("refresh_token", data.refresh_token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 30 * 24 * 60 * 60,
+  });
+
+  const name = (data.user?.firstName + " " + data.user?.lastName).trim();
+  jar.set("user_name", name || data.user.email, {
+    httpOnly: false,
+    secure: true,
+    sameSite: "lax",
+    path: "/",
+    maxAge: 30 * 24 * 60 * 60,
+  });
+
+  redirect("/dashboard");
 
   return {
     ok: true,
-    message: "Signed in successfully.",
+    message: "Logged in successfully.",
     errors: {},
   };
+};
+
+export const logoutAction = async () => {
+  await clearAuthCookies();
+
+  redirect("/login");
 };
