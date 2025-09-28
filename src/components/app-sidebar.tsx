@@ -44,8 +44,8 @@ const data = {
       icon: IconChartBar,
     },
     {
-      title: "Habbit Tracker",
-      url: "/habbit-tracker",
+      title: "Habit Tracker",
+      url: "/habit-tracker",
       icon: IconFolder,
     },
     // {
