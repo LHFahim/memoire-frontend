@@ -8,7 +8,6 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
     <SidebarProvider
       style={
         {
-          // keep the same CSS vars you used on the page
           "--sidebar-width": "calc(var(--spacing) * 72)",
           "--header-height": "calc(var(--spacing) * 12)",
         } as React.CSSProperties
