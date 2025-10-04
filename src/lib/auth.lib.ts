@@ -1,8 +1,9 @@
 // "use server";
 
-import { ILoginResponse } from "@/interfaces/auth.interface";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
+
+export const API_BASE_URL = "http://localhost:5000";
 
 export const getTokens = async () => {
   const jar = await cookies();

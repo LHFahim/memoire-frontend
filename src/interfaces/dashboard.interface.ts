@@ -11,6 +11,7 @@ export enum BoardVisibilityEnum {
 
 export interface IDashboard {
   _id?: string;
+  id?: string;
   name: string;
   description: string;
   visibility: BoardVisibilityEnum;
@@ -21,4 +22,14 @@ export interface IDashboard {
   createdBy: string;
   createdAt?: Date;
   updatedAt?: Date;
+}
+
+export interface IDashboardResponse {
+  items: IDashboard[];
+  pagination: {
+    total: number;
+    current: number;
+    previous: number;
+    next: number;
+  };
 }
