@@ -16,9 +16,13 @@ export default async function DashboardPage({
 
   return (
     <>
-      {/* <div>{dashboard.name} board!</div> */}
-      <section className="m-28">
-        {/* <h1>{dashboard.description}</h1> */}
+      <section className="mt-10 ml-10 space-y-2">
+        <h1 className="text-2xl font-bold">My Tasks</h1>
+        <p className="text-sm text-muted-foreground">
+          Track and manage all your tasks here
+        </p>
+      </section>
+      <section className="ml-28 mt-10 mr-28 border border-border rounded-md p-6">
         <TaskWrapper initialData={tasks} />
       </section>
     </>
