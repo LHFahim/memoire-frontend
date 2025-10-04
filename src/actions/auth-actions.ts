@@ -1,7 +1,6 @@
 "use server";
 
 import { ILoginResponse, ILoginState } from "@/interfaces/auth.interface";
-import { clearAuthCookies } from "@/lib/auth.lib";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -79,7 +78,11 @@ export const loginAction = async (
 };
 
 export const logoutAction = async () => {
-  await clearAuthCookies();
+  const jar = await cookies();
+
+  jar.delete("access_token");
+  jar.delete("refresh_token");
+  jar.delete("user_name");
 
   redirect("/login");
 };

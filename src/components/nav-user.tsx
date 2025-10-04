@@ -6,6 +6,7 @@ import {
   IconUserCircle,
 } from "@tabler/icons-react";
 
+import { logoutAction } from "@/actions/auth-actions";
 import { Avatar, AvatarImage } from "@/components/ui/avatar";
 import {
   DropdownMenu,
@@ -23,6 +24,7 @@ import {
   useSidebar,
 } from "@/components/ui/sidebar";
 import { IAuthUser } from "@/interfaces/auth.interface";
+import { redirect } from "next/navigation";
 
 export function NavUser({ user }: { user: IAuthUser }) {
   const { isMobile } = useSidebar();
@@ -85,7 +87,7 @@ export function NavUser({ user }: { user: IAuthUser }) {
             </DropdownMenuLabel>
             <DropdownMenuSeparator />
             <DropdownMenuGroup>
-              <DropdownMenuItem>
+              <DropdownMenuItem onClick={() => redirect("/account")}>
                 <IconUserCircle />
                 Account
               </DropdownMenuItem>
@@ -99,7 +101,7 @@ export function NavUser({ user }: { user: IAuthUser }) {
               </DropdownMenuItem> */}
             </DropdownMenuGroup>
             <DropdownMenuSeparator />
-            <DropdownMenuItem>
+            <DropdownMenuItem onClick={() => logoutAction()}>
               <IconLogout />
               Log out
             </DropdownMenuItem>
