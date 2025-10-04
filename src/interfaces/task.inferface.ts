@@ -35,13 +35,6 @@ export interface ITask {
   updatedAt: string;
 }
 
-export interface ITaskResponse {
-  items: ITask[];
-  totalItems: number;
-  totalPages: number;
-  currentPage: number;
-}
-
 export interface IPagination {
   total: number;
   current: number;
