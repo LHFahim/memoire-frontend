@@ -2,8 +2,14 @@
 import { AppSidebar } from "@/components/app-sidebar";
 import { SiteHeader } from "@/components/site-header";
 import { SidebarInset, SidebarProvider } from "@/components/ui/sidebar";
+import { getAuthUser } from "@/lib/auth.lib";
 
-export default function AppLayout({ children }: { children: React.ReactNode }) {
+export default async function AppLayout({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
+  const authUser = await getAuthUser();
   return (
     <SidebarProvider
       style={
@@ -13,7 +19,7 @@ export default function AppLayout({ children }: { children: React.ReactNode }) {
         } as React.CSSProperties
       }
     >
-      <AppSidebar variant="inset" />
+      <AppSidebar variant="inset" authUser={authUser} />
       <SidebarInset>
         <SiteHeader />
         <div className="flex min-h-screen flex-1 flex-col">

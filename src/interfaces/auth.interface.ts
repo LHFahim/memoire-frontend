@@ -15,3 +15,24 @@ export interface ILoginResponse {
     [k: string]: unknown;
   };
 }
+
+export interface IAuthUser {
+  _id?: string;
+  id?: string;
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  password?: string;
+  avatarURL?: string;
+  authProvider?: "EMAIL" | "GOOGLE" | "GITHUB" | string;
+  lastLogin?: Date;
+  isEmailVerified?: boolean;
+  phone?: string;
+  panelType?: "ADMIN" | "USER" | "MODERATOR" | string;
+  passwordChangeNeeded?: boolean;
+  isActive?: boolean;
+  isDeleted?: boolean;
+  createdAt?: Date;
+  updatedAt?: Date;
+  __v?: number;
+}

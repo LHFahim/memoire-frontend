@@ -62,3 +62,24 @@ export const clearAuthCookies = async () => {
   jar.delete("refresh_token");
   jar.delete("user_name");
 };
+
+export const getAuthUser = async () => {
+  const { access_token } = await getTokens();
+
+  if (!access_token) {
+    throw new Error("No access token");
+  }
+
+  const res = await fetch(`${API_BASE_URL}/profile/me`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+
+  if (!res.ok) {
+    throw new Error("Failed to fetch user");
+  }
+
+  const data = await res.json();
+  return data;
+};
