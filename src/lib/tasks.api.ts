@@ -1,6 +1,6 @@
-import { ITaskResponse, TaskStatus } from "@/interfaces/task.inferface";
+import { ITaskResponse } from "@/interfaces/task.inferface";
 import { cookies } from "next/headers";
-import { API_BASE_URL, getTokens } from "./auth.lib";
+import { API_BASE_URL } from "./auth.lib";
 
 export const fetchTasks = async ({ dashboardId }: { dashboardId?: string }) => {
   const token = (await cookies()).get("access_token")?.value;

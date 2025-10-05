@@ -1,16 +1,16 @@
-export enum TaskStatus {
+export enum TaskStatusEnum {
   PENDING = "PENDING",
   IN_PROGRESS = "IN_PROGRESS",
   COMPLETED = "COMPLETED",
 }
 
-export enum TaskPriority {
+export enum TaskPriorityEnum {
   LOW = "LOW",
   MEDIUM = "MEDIUM",
   HIGH = "HIGH",
 }
 
-export enum TaskType {
+export enum TaskTypeEnum {
   PERSONAL = "PERSONAL",
   WORK = "WORK",
   OTHER = "OTHER",
@@ -20,9 +20,9 @@ export interface ITask {
   id: string;
   title: string;
   description: string;
-  status: TaskStatus;
-  priority: TaskPriority;
-  type: TaskType;
+  status: TaskStatusEnum;
+  priority: TaskPriorityEnum;
+  type: TaskTypeEnum;
   dueDate: string;
   attachments: string[];
   color: string;
@@ -45,4 +45,13 @@ export interface IPagination {
 export interface ITaskResponse {
   items: ITask[];
   pagination: IPagination;
+}
+
+export interface ICreateTaskPayload {
+  title: string;
+  description: string;
+  status: TaskStatusEnum;
+  priority: TaskPriorityEnum;
+  type: TaskTypeEnum;
+  dueDate?: string | null;
 }
