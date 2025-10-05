@@ -1,6 +1,9 @@
+"use client";
+
 import { IReflection } from "@/interfaces/reflection.interface";
 import Image from "next/image";
 import Link from "next/link";
+import { useParams } from "next/navigation";
 import { Button } from "../ui/button";
 import {
   Card,
@@ -16,7 +19,8 @@ export default function ReflectionItem({
 }: {
   reflection: IReflection;
 }) {
-  console.log("reflection item", reflection);
+  const params = useParams();
+
   return (
     <div className="hover:scale-[1.01] transition-transform">
       <Card className="w-full max-w-sm">
@@ -41,7 +45,7 @@ export default function ReflectionItem({
             : reflection.content}
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Link href={`/reflections/${reflection.id}`}>
+          <Link href={`${params?.dashboardId}/reflections/${reflection.id}`}>
             <Button variant="link">View Reflection</Button>
           </Link>
         </CardFooter>
