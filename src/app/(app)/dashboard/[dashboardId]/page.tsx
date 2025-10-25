@@ -6,12 +6,16 @@ import { fetchDashboardById } from "@/lib/dashboard.api";
 import { fetchReflections } from "@/lib/reflections.api";
 import { fetchTasks } from "@/lib/tasks.api";
 
+interface DashboardPageProps {
+  params: { dashboardId: string };
+}
+
 export default async function DashboardPage({
   params,
 }: {
-  params: { dashboardId: string };
+  params: Promise<DashboardPageProps["params"]>;
 }) {
-  const dashboard = await fetchDashboardById(params?.dashboardId || "");
+  const dashboard = await fetchDashboardById((await params)?.dashboardId || "");
 
   const tasks: ITaskResponse = await fetchTasks({
     dashboardId: dashboard.id || "",

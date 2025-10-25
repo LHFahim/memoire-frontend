@@ -60,7 +60,7 @@ export default function TaskTable({
   const [dueDate, setDueDate] = useState<string>(""); // yyyy-mm-dd
 
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
+  const pageSize = 5;
 
   const resetForm = () => {
     setTitle("");
@@ -106,6 +106,9 @@ export default function TaskTable({
     (currentPage - 1) * pageSize,
     currentPage * pageSize
   );
+
+  console.log("Paginated Tasks:", paginatedTasks);
+  console.log("Sorted Tasks:", sortedTasks);
 
   return (
     <div className="min-h-[300px] overflow-auto">
@@ -241,11 +244,7 @@ export default function TaskTable({
                   {task.title}
                 </TableCell>
                 <TableCell className="px-4 py-3">{task.description}</TableCell>
-                <TableCell className="px-4 py-3">
-                  {task.status === TaskStatusEnum.IN_PROGRESS
-                    ? "IN PROGRESS"
-                    : task.status}
-                </TableCell>
+                <TableCell className="px-4 py-3">{task.status}</TableCell>
                 <TableCell className="px-4 py-3">{task.priority}</TableCell>
                 <TableCell className="text-center">{task.type}</TableCell>
                 <TableCell className="text-center">
