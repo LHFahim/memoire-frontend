@@ -9,7 +9,7 @@ export default async function TaskPage() {
 
   return (
     <>
-      <h1>Task</h1>
+      <h1 className="mt-10 ml-10 text-2xl font-bold">All Tasks</h1>
       <section className="mt-10 ml-10 mr-10 border border-border rounded-md p-6">
         <TaskWrapper initialData={data} canCreate={false} />
       </section>
