@@ -11,8 +11,10 @@ import TaskTable from "./task-table";
 
 export default function TaskWrapper({
   initialData,
+  canCreate = true,
 }: {
   initialData: ITaskResponse;
+  canCreate?: boolean;
 }) {
   const [dataState, setDataState] = useState<ITaskResponse>(initialData);
 
@@ -63,7 +65,8 @@ export default function TaskWrapper({
     <TaskTable
       data={dataState}
       onToggle={handleToggle}
-      onCreate={handleCreateTask}
+      canCreate={canCreate}
+      onCreate={canCreate ? handleCreateTask : undefined}
     />
   );
 }

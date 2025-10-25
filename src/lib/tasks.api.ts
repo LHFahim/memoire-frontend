@@ -6,7 +6,9 @@ export const fetchTasks = async ({ dashboardId }: { dashboardId?: string }) => {
   const token = (await cookies()).get("access_token")?.value;
 
   const res = await fetch(
-    `${API_BASE_URL}/todos?page=1&pageSize=20&sortBy=createdAt&sort=desc&boardId=${dashboardId}`,
+    `${API_BASE_URL}/todos?page=1&pageSize=20&sortBy=createdAt&sort=desc${
+      dashboardId ? `&boardId=${dashboardId}` : ""
+    }`,
     {
       headers: {
         Authorization: `Bearer ${token}`,

@@ -40,12 +40,14 @@ interface TodoBoardProps {
       dueDate?: string | null;
     }
   ) => Promise<void> | void;
+  canCreate?: boolean;
 }
 
 export default function TaskTable({
   data,
   onToggle,
   onCreate,
+  canCreate = true,
 }: TodoBoardProps) {
   const params = useParams();
 
@@ -60,7 +62,7 @@ export default function TaskTable({
   const [dueDate, setDueDate] = useState<string>(""); // yyyy-mm-dd
 
   const [currentPage, setCurrentPage] = useState(1);
-  const pageSize = 10;
+  const pageSize = canCreate ? 5 : 10000;
 
   const resetForm = () => {
     setTitle("");
@@ -264,9 +266,11 @@ export default function TaskTable({
               <div className="flex items-center justify-between">
                 <div className="text-sm text-muted-foreground" />
                 {!showForm ? (
-                  <Button size="sm" onClick={() => setShowForm(true)}>
-                    Add Task
-                  </Button>
+                  canCreate && (
+                    <Button size="sm" onClick={() => setShowForm(true)}>
+                      Add Task
+                    </Button>
+                  )
                 ) : (
                   <div className="space-x-2">
                     <Button
