@@ -1,3 +1,5 @@
+import { IPagination } from "./task.inferface";
+
 export interface DashboardSettings {
   isCommentsEnabled?: boolean;
   isAttachmentsEnabled?: boolean;
@@ -26,10 +28,5 @@ export interface IDashboard {
 
 export interface IDashboardResponse {
   items: IDashboard[];
-  pagination: {
-    total: number;
-    current: number;
-    previous: number;
-    next: number;
-  };
+  pagination: IPagination;
 }
