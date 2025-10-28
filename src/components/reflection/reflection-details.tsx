@@ -6,7 +6,7 @@
 // }: {
 //   reflection: IReflection;
 // }) {
-//   console.log("object", reflection);
+//
 //   return (
 //     <>
 //       <section className="max-w-3xl mx-auto mt-10 bg-white rounded-2xl shadow p-8">

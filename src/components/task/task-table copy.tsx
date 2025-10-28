@@ -107,9 +107,6 @@ export default function TaskTable({
     currentPage * pageSize
   );
 
-  console.log("Paginated Tasks:", paginatedTasks);
-  console.log("Sorted Tasks:", sortedTasks);
-
   return (
     <div className="min-h-[300px] overflow-auto">
       <Table className="w-full">

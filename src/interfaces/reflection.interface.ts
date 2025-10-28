@@ -32,3 +32,10 @@ export interface IReflectionResponse {
   items: IReflection[];
   pagination: IPagination;
 }
+
+export interface ICreateReflectionPayload {
+  title: string;
+  content: string;
+  image_url: string;
+  board: string;
+}

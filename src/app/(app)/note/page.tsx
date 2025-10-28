@@ -7,7 +7,6 @@ export default async function NotePage() {
 
   return (
     <div>
-      Note Page
       <section className="mt-10 ml-10 mr-10">
         <ReflectionForm boards={data?.items || []} />
       </section>

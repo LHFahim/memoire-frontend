@@ -14,7 +14,13 @@ import {
 import { Input } from "@/components/ui/input";
 import { zodResolver } from "@hookform/resolvers/zod";
 
+import {
+  createReflectionAction,
+  uploadReflectionImageAction,
+} from "@/actions/reflection-actions";
 import { IDashboard } from "@/interfaces/dashboard.interface";
+import { useRouter } from "next/navigation";
+import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import {
   Select,
@@ -29,6 +35,9 @@ interface ReflectionFormProps {
   boards: IDashboard[];
 }
 
+// const MAX_FILE_SIZE = 5 * 1024 * 1024; // 5MB
+const ACCEPTED_TYPES = ["image/jpeg", "image/png", "image/webp"];
+
 const formSchema = z.object({
   title: z.string().min(2, {
     message: "Title must be at least 2 characters.",
@@ -39,18 +48,74 @@ const formSchema = z.object({
   board: z.string().min(1, {
     message: "Please select a board.",
   }),
+  image: z
+    .custom<File | undefined>()
+    .refine(
+      (file) => !file || ACCEPTED_TYPES.includes(file.type),
+      "Only JPG/PNG/WebP files are allowed."
+    )
+    // .refine(
+    //   (file) => !file || file.size <= MAX_FILE_SIZE,
+    //   "Image must be 5MB or smaller."
+    // )
+    .optional(),
 });
 
 export function ReflectionForm({ boards }: ReflectionFormProps) {
+  const [preview, setPreview] = useState<string | null>(null);
+
+  const router = useRouter();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      title: "",
+      title: `Where does it come from?`,
+      content: `Contrary to popular belief, Lorem Ipsum is not simply random text. It has roots in a piece of classical Latin literature from 45 BC, making it over 2000 years old. Richard McClintock, a Latin professor at Hampden-Sydney College in Virginia, looked up one of the more obscure Latin words, consectetur, from a Lorem Ipsum passage, and going through the cites of the word in classical literature, discovered the undoubtable source. Lorem Ipsum comes from sections 1.10.32 and 1.10.33 of "de Finibus Bonorum et Malorum" (The Extremes of Good and Evil) by Cicero, written in 45 BC. This book is a treatise on the theory of ethics, very popular during the Renaissance. The first line of Lorem Ipsum, "Lorem ipsum dolor sit amet..", comes from a line in section 1.10.32.
+
+The standard chunk of Lorem Ipsum used since the 1500s is reproduced below for those interested. Sections 1.10.32 and 1.10.33 from "de Finibus Bonorum et Malorum" by Cicero are also reproduced in their exact original form, accompanied by English versions from the 1914 translation by H. Rackham.`,
+      board: "",
+      image: undefined,
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log("values:", values);
+  useEffect(() => {
+    return () => {
+      if (preview) URL.revokeObjectURL(preview);
+    };
+  }, [preview]);
+
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    let urlObj = { url: "", message: "" };
+
+    try {
+      const fd = new FormData();
+      if (values.image) fd.append("image", values.image);
+
+      // sending form data to upload image endpoint
+      urlObj = await uploadReflectionImageAction(fd);
+
+      const reflectionObj = await createReflectionAction({
+        title: values.title,
+        content: values.content,
+        image_url: urlObj.url,
+        board: values.board,
+      });
+
+      // toast.success("Reflection created!");
+      // setTimeout(
+      //   () =>
+      //     router.push(
+      //       `/dashboard/${reflectionObj.board}/reflections/${reflectionObj.id}`
+      //     ),
+      //   1500
+      // );
+
+      router.push(
+        `/dashboard/${reflectionObj.board}/reflections/${reflectionObj.id}`
+      );
+    } catch (error) {
+      console.error("Error creating reflection:", error);
+    }
   }
 
   return (
@@ -117,6 +182,42 @@ export function ReflectionForm({ boards }: ReflectionFormProps) {
                   className="w-full min-h-[200px]"
                   {...field}
                 />
+              </FormControl>
+              <FormMessage />
+            </FormItem>
+          )}
+        />
+
+        {/* image picker */}
+        <FormField
+          control={form.control}
+          name="image"
+          render={({ field }) => (
+            <FormItem>
+              <FormLabel>Image</FormLabel>
+              <FormControl>
+                <div className="grid w-full max-w-sm items-center gap-3">
+                  <Input
+                    id="image"
+                    type="file"
+                    accept="image/*"
+                    // IMPORTANT: don't pass `value` for file inputs
+                    onChange={(e) => {
+                      const file = e.target.files?.[0];
+                      field.onChange(file); // store File in RHF state
+                      // preview
+                      if (preview) URL.revokeObjectURL(preview);
+                      setPreview(file ? URL.createObjectURL(file) : null);
+                    }}
+                  />
+                  {preview && (
+                    <img
+                      src={preview}
+                      alt="preview"
+                      className="h-40 w-auto rounded-md border"
+                    />
+                  )}
+                </div>
               </FormControl>
               <FormMessage />
             </FormItem>
