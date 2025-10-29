@@ -51,3 +51,30 @@ export const uploadReflectionImageAction = async (payload: FormData) => {
 
   return data;
 };
+
+export const deleteReflectionAction = async ({
+  reflectionId,
+  dashboardId,
+}: {
+  reflectionId: string;
+  dashboardId: string;
+}) => {
+  const jar = await cookies();
+  const access_token = jar.get("access_token")?.value;
+
+  const res = await fetch(
+    `${API_BASE_URL}/reflections/${dashboardId}/${reflectionId}`,
+    {
+      method: "DELETE",
+      headers: {
+        Authorization: `Bearer ${access_token}`,
+      },
+    }
+  );
+
+  if (!res.ok) throw new Error("Failed to delete reflection");
+
+  const data = await res.json();
+
+  return data;
+};

@@ -1,12 +1,12 @@
-"use client";
-
+import { deleteReflectionAction } from "@/actions/reflection-actions";
 import { IReflection } from "@/interfaces/reflection.interface";
 import Image from "next/image";
 import Link from "next/link";
-import { useParams } from "next/navigation";
+import { DropdownMenuDialog } from "../dropdown/dropdown-menu-dialog";
 import { Button } from "../ui/button";
 import {
   Card,
+  CardAction,
   CardContent,
   CardDescription,
   CardFooter,
@@ -16,10 +16,15 @@ import {
 
 export default function ReflectionItem({
   reflection,
+  dashboardId,
 }: {
   reflection: IReflection;
+  dashboardId: string;
 }) {
-  const params = useParams();
+  const deleteRAction = deleteReflectionAction.bind(null, {
+    reflectionId: reflection.id as string,
+    dashboardId: dashboardId as string,
+  });
 
   return (
     <div className="hover:scale-[1.01] transition-transform">
@@ -35,9 +40,9 @@ export default function ReflectionItem({
               className="object-cover rounded-2xl"
             />
           </CardDescription>
-          {/* <CardAction>
-            <Button variant="link">Sign Up</Button>
-          </CardAction> */}
+          <CardAction>
+            <DropdownMenuDialog deleteAction={deleteRAction} />
+          </CardAction>
         </CardHeader>
         <CardContent>
           {reflection.content.length > 100
@@ -45,7 +50,7 @@ export default function ReflectionItem({
             : reflection.content}
         </CardContent>
         <CardFooter className="flex-col gap-2">
-          <Link href={`${params?.dashboardId}/reflections/${reflection.id}`}>
+          <Link href={`${dashboardId}/reflections/${reflection.id}`}>
             <Button variant="link">View Reflection</Button>
           </Link>
         </CardFooter>
