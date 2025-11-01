@@ -32,8 +32,6 @@ export async function createDashboardAction(formData: FormData) {
 }
 
 export const editDashboardAction = async (formData: FormData) => {
-  console.log("hi from editDashboardAction()");
-
   const access_token = (await cookies()).get("access_token")?.value;
 
   const dashboardId = (formData.get("dashboardId") || "").toString().trim();
@@ -57,4 +55,26 @@ export const editDashboardAction = async (formData: FormData) => {
   const data = await res.json();
 
   revalidatePath("/dashboard");
+};
+
+export const deleteDashboardAction = async (formData: FormData) => {
+  const access_token = (await cookies()).get("access_token")?.value;
+
+  const dashboardId = (formData.get("dashboardId") || "").toString().trim();
+
+  const res = await fetch(`${API_BASE_URL}/boards/${dashboardId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(text || "Failed to delete dashboard");
+  }
+
+  revalidatePath("/dashboard");
+
+  // return true;
 };
