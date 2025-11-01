@@ -1,3 +1,4 @@
+import { editDashboardAction } from "@/actions/dashboard-actions";
 import {
   Table,
   TableBody,
@@ -8,6 +9,7 @@ import {
 } from "@/components/ui/table";
 import { IDashboard } from "@/interfaces/dashboard.interface";
 import Link from "next/link";
+import { EditDashboardDialog } from "../dashboard/edit-dashboard-dialog";
 import { Button } from "../ui/button";
 
 interface DashboardProps {
@@ -36,9 +38,13 @@ export default function DashboardTable({ dashboards }: DashboardProps) {
               <Button variant="outline" size="sm">
                 <Link href={`/dashboard/${dashboard.id}`}>View</Link>
               </Button>
-              <Button variant="outline" size="sm">
-                <Link href={`/dashboard/${dashboard._id}/edit`}>Edit</Link>
-              </Button>
+              <>
+                {/* <Link href={`/dashboard/${dashboard._id}/edit`}>Edit</Link> */}
+                <EditDashboardDialog
+                  dashboard={dashboard}
+                  action={editDashboardAction}
+                />
+              </>
               <Button variant="outline" size="sm">
                 <Link href={`/dashboard/${dashboard._id}/delete`}>Delete</Link>
               </Button>
