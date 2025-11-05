@@ -63,3 +63,22 @@ export const fetchLastActiveSession = async (
 
   return data;
 };
+
+export const fetchAllHabitSessions = async (habitId: string) => {
+  const access_token = (await cookies()).get("access_token")?.value;
+
+  const res = await fetch(`${API_BASE_URL}/habits/${habitId}/habit-sessions`, {
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+    },
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(text || "Failed to fetch habit sessions");
+  }
+
+  const data = await res.json();
+
+  return data;
+};
