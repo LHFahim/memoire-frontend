@@ -9,8 +9,8 @@ export async function endHabitSessionAction({
   habitId,
   sessionId,
 }: {
-  habitId: string;
-  sessionId: string;
+  habitId?: string;
+  sessionId?: string;
 }) {
   const access_token = (await cookies()).get("access_token")?.value;
 

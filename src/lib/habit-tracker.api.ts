@@ -56,12 +56,14 @@ export const fetchLastActiveSession = async (
 
   if (!res.ok) {
     const text = await res.text().catch(() => "");
-    throw new Error(text || "Failed to fetch last active session");
+    // throw new Error(text || "Failed to fetch last active session");
   }
 
-  const data = await res.json();
+  if (res.ok) {
+    const data = await res.json();
 
-  return data;
+    return data;
+  }
 };
 
 export const fetchAllHabitSessions = async (habitId: string) => {

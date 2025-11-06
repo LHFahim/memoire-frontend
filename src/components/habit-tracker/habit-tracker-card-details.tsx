@@ -19,6 +19,10 @@ export default async function HabitTrackerCardDetails({
     habit.lastHabitSession!
   );
 
+  const shouldClockBeActive = Boolean(
+    lastActiveSession && !lastActiveSession.endedAt
+  );
+
   const allHabitSessions = await fetchAllHabitSessions(habit.id);
   const sortedSessions = allHabitSessions.sort(
     (a: { startedAt: string }, b: { startedAt: string }) =>
@@ -26,8 +30,8 @@ export default async function HabitTrackerCardDetails({
   );
 
   const endHSAction = endHabitSessionAction.bind(null, {
-    habitId: habit.id as string,
-    sessionId: lastActiveSession.id as string,
+    habitId: (habit.id as string) || "",
+    sessionId: (lastActiveSession?.id as string) || "",
   });
 
   return (
@@ -64,7 +68,8 @@ export default async function HabitTrackerCardDetails({
         </section>
         <section className="flex items-center justify-center">
           <Clock
-            lastActiveSessionStartedAt={lastActiveSession.startedAt}
+            shouldClockBeActive={shouldClockBeActive}
+            lastActiveSessionStartedAt={lastActiveSession?.startedAt}
             endAction={endHSAction}
           />
         </section>
