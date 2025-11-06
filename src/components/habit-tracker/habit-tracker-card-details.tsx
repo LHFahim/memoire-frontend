@@ -1,3 +1,4 @@
+import { endHabitSessionAction } from "@/actions/habit-actions";
 import { IHabitTracker } from "@/interfaces/habit-tracker.interface";
 import {
   fetchAllHabitSessions,
@@ -23,6 +24,11 @@ export default async function HabitTrackerCardDetails({
     (a: { startedAt: string }, b: { startedAt: string }) =>
       new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime()
   );
+
+  const endHSAction = endHabitSessionAction.bind(null, {
+    habitId: habit.id as string,
+    sessionId: lastActiveSession.id as string,
+  });
 
   return (
     <div className="space-y-30">
@@ -57,7 +63,10 @@ export default async function HabitTrackerCardDetails({
           </Label>
         </section>
         <section className="flex items-center justify-center">
-          <Clock lastActiveSessionStartedAt={lastActiveSession.startedAt} />
+          <Clock
+            lastActiveSessionStartedAt={lastActiveSession.startedAt}
+            endAction={endHSAction}
+          />
         </section>
       </section>
       <section className="grid grid-cols-1 md:grid-cols-2">

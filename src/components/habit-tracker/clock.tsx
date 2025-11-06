@@ -4,8 +4,10 @@ import { useEffect, useState } from "react";
 
 export default function Clock({
   lastActiveSessionStartedAt,
+  endAction,
 }: {
   lastActiveSessionStartedAt: string;
+  endAction: () => Promise<void>;
 }) {
   const [elapsed, setElapsed] = useState({ hours: 0, minutes: 0, seconds: 0 });
 
@@ -34,6 +36,12 @@ export default function Clock({
         <span>Hours: {elapsed.hours}</span>
         <span>Minutes: {elapsed.minutes}</span>
         <span>Seconds: {elapsed.seconds}</span>
+        <button
+          className="bg-red-500 text-white py-1 px-2 rounded-lg mt-5"
+          onClick={endAction}
+        >
+          End Session
+        </button>
       </div>
     </div>
   );
