@@ -23,7 +23,9 @@ export function CreateHabitTrackerDialog({
   return (
     <Dialog>
       <DialogTrigger asChild>
-        <Button variant="outline">New Habit</Button>
+        <section className="flex justify-end">
+          <Button variant="outline">New Habit</Button>
+        </section>
       </DialogTrigger>
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>

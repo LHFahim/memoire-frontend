@@ -5,6 +5,34 @@ import { revalidatePath } from "next/cache";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
+export async function startHabitSessionAction({
+  habitId,
+}: {
+  habitId?: string;
+}) {
+  const access_token = (await cookies()).get("access_token")?.value;
+
+  const res = await fetch(`${API_BASE_URL}/habits/habit/${habitId}`, {
+    method: "POST",
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ startedAt: new Date().toISOString() }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(text || "Failed to create dashboard");
+  }
+
+  const data = await res.json();
+
+  revalidatePath("/habit-tracker");
+  revalidatePath("/habit-tracker/" + habitId);
+
+  return data;
+}
 export async function endHabitSessionAction({
   habitId,
   sessionId,

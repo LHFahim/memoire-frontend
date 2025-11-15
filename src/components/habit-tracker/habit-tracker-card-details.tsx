@@ -1,4 +1,7 @@
-import { endHabitSessionAction } from "@/actions/habit-actions";
+import {
+  endHabitSessionAction,
+  startHabitSessionAction,
+} from "@/actions/habit-actions";
 import { IHabitTracker } from "@/interfaces/habit-tracker.interface";
 import {
   fetchAllHabitSessions,
@@ -32,6 +35,10 @@ export default async function HabitTrackerCardDetails({
   const endHSAction = endHabitSessionAction.bind(null, {
     habitId: (habit.id as string) || "",
     sessionId: (lastActiveSession?.id as string) || "",
+  });
+
+  const startHSAction = startHabitSessionAction.bind(null, {
+    habitId: habit.id as string,
   });
 
   return (
@@ -71,6 +78,7 @@ export default async function HabitTrackerCardDetails({
             shouldClockBeActive={shouldClockBeActive}
             lastActiveSessionStartedAt={lastActiveSession?.startedAt}
             endAction={endHSAction}
+            startAction={startHSAction}
           />
         </section>
       </section>
