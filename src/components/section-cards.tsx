@@ -1,5 +1,8 @@
+"use server";
+
 import { IconHealthRecognition } from "@tabler/icons-react";
 
+import { deleteHabtitTrackerAction } from "@/actions/habit-actions";
 import { Badge } from "@/components/ui/badge";
 import {
   Card,
@@ -10,10 +13,11 @@ import {
 } from "@/components/ui/card";
 import { IHabitTracker } from "@/interfaces/habit-tracker.interface";
 import Link from "next/link";
+import { DeleteHabitTrackerDialog } from "./habit-tracker/delete-habit-tracker-dialog";
 import { Button } from "./ui/button";
 import { Label } from "./ui/label";
 
-export function SectionCards({ habits }: { habits: IHabitTracker[] }) {
+export async function SectionCards({ habits }: { habits: IHabitTracker[] }) {
   return (
     <div className="grid grid-cols-1 gap-4 px-4 sm:grid-cols-2 lg:grid-cols-4 lg:px-6">
       {habits.map((habit) => {
@@ -48,6 +52,14 @@ export function SectionCards({ habits }: { habits: IHabitTracker[] }) {
                 >
                   <Link href={`/habit-tracker/${habit.id}`}>View here</Link>
                 </Button>
+
+                <section className="w-full flex justify-center">
+                  {" "}
+                  <DeleteHabitTrackerDialog
+                    habit={habit}
+                    action={deleteHabtitTrackerAction}
+                  />
+                </section>
               </CardAction>
             </CardHeader>
             {/* <CardFooter className="flex-col items-start gap-1.5 text-sm">

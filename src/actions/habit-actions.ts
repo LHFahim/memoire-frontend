@@ -92,3 +92,23 @@ export const createHabitTrackerAction = async (formData: FormData) => {
   revalidatePath("/habit-tracker");
   redirect(`/habit-tracker/${data.id}`);
 };
+
+export const deleteHabtitTrackerAction = async (formData: FormData) => {
+  const access_token = (await cookies()).get("access_token")?.value;
+  const habitId = (formData.get("habitId") || "").toString().trim();
+
+  const res = await fetch(`${API_BASE_URL}/habits/${habitId}`, {
+    method: "DELETE",
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    },
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    throw new Error(text || "Failed to delete habit tracker");
+  }
+
+  revalidatePath("/habit-tracker");
+};
