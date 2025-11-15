@@ -1,5 +1,6 @@
 "use client";
 
+import { changePasswordAction } from "@/actions/auth-actions";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -18,7 +19,8 @@ export function AccountSecurity() {
 
   function handleSubmit(formData: FormData) {
     startTransition(async () => {
-      // await changePasswordAction(formData);
+      console.log("handleSubmit called");
+      await changePasswordAction(formData);
     });
   }
 

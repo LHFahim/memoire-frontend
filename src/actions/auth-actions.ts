@@ -1,6 +1,7 @@
 "use server";
 
 import { ILoginResponse, ILoginState } from "@/interfaces/auth.interface";
+import { API_BASE_URL } from "@/lib/auth.lib";
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 
@@ -85,4 +86,40 @@ export const logoutAction = async () => {
   jar.delete("user_name");
 
   redirect("/login");
+};
+
+export const changePasswordAction = async (formData: FormData) => {
+  console.log("hi ");
+  const access_token = (await cookies()).get("access_token")?.value;
+
+  const currentPassword = (formData.get("currentPassword") || "").toString();
+  const newPassword = (formData.get("newPassword") || "").toString();
+  const confirmPassword = (formData.get("confirmPassword") || "").toString();
+
+  if (newPassword !== confirmPassword) {
+    throw new Error("New password and confirm password do not match.");
+  }
+
+  const res = await fetch(`${API_BASE_URL}/admin/auth/change-password`, {
+    method: "PATCH",
+    headers: {
+      Authorization: `Bearer ${access_token}`,
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({
+      oldPassword: currentPassword,
+      newPassword,
+      confirmPassword,
+    }),
+  });
+
+  if (!res.ok) {
+    const text = await res.text().catch(() => "");
+    console.log("text", text);
+    throw new Error(text || "Failed to change password");
+  }
+
+  const data = await res.json();
+
+  return data;
 };
