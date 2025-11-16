@@ -2,11 +2,11 @@ import {
   endHabitSessionAction,
   startHabitSessionAction,
 } from "@/actions/habit-actions";
-import { IHabitTracker } from "@/interfaces/habit-tracker.interface";
 import {
-  fetchAllHabitSessions,
-  fetchLastActiveSession,
-} from "@/lib/habit-tracker.api";
+  IHabitSession,
+  IHabitTracker,
+} from "@/interfaces/habit-tracker.interface";
+import { fetchAllHabitSessions } from "@/lib/habit-tracker.api";
 import { formatDate } from "@/lib/utils.lib";
 import { Label } from "../ui/label";
 import Clock from "./clock";
@@ -17,20 +17,26 @@ export default async function HabitTrackerCardDetails({
 }: {
   habit: IHabitTracker;
 }) {
-  const lastActiveSession = await fetchLastActiveSession(
-    habit.id,
-    habit.lastHabitSession!
-  );
-
-  const shouldClockBeActive = Boolean(
-    lastActiveSession && !lastActiveSession.endedAt
-  );
-
   const allHabitSessions = await fetchAllHabitSessions(habit.id);
   const sortedSessions = allHabitSessions.sort(
     (a: { startedAt: string }, b: { startedAt: string }) =>
       new Date(b.startedAt).getTime() - new Date(a.startedAt).getTime()
   );
+
+  const lastActiveSession = allHabitSessions.find(
+    (session: IHabitSession) => session.endedAt === null
+  );
+
+  const shouldClockBeActive = Boolean(lastActiveSession);
+
+  // const lastActiveSession = await fetchLastActiveSession(
+  //   habit.id,
+  //   habit.lastHabitSession!
+  // );
+
+  // const shouldClockBeActive = Boolean(
+  //   lastActiveSession && !lastActiveSession.endedAt
+  // );
 
   const endHSAction = endHabitSessionAction.bind(null, {
     habitId: (habit.id as string) || "",
