@@ -17,9 +17,8 @@ import { useTransition } from "react";
 export function AccountSecurity() {
   const [isPending, startTransition] = useTransition();
 
-  function handleSubmit(formData: FormData) {
+  async function handleSubmit(formData: FormData) {
     startTransition(async () => {
-      console.log("handleSubmit called");
       await changePasswordAction(formData);
     });
   }

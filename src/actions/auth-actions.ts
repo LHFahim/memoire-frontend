@@ -89,7 +89,6 @@ export const logoutAction = async () => {
 };
 
 export const changePasswordAction = async (formData: FormData) => {
-  console.log("hi ");
   const access_token = (await cookies()).get("access_token")?.value;
 
   const currentPassword = (formData.get("currentPassword") || "").toString();
@@ -100,7 +99,7 @@ export const changePasswordAction = async (formData: FormData) => {
     throw new Error("New password and confirm password do not match.");
   }
 
-  const res = await fetch(`${API_BASE_URL}/admin/auth/change-password`, {
+  const res = await fetch(`${API_BASE_URL}/auth/change-password`, {
     method: "PATCH",
     headers: {
       Authorization: `Bearer ${access_token}`,
@@ -108,14 +107,14 @@ export const changePasswordAction = async (formData: FormData) => {
     },
     body: JSON.stringify({
       oldPassword: currentPassword,
-      newPassword,
-      confirmPassword,
+      newPassword: newPassword,
+      confirmNewPassword: confirmPassword,
     }),
   });
 
   if (!res.ok) {
     const text = await res.text().catch(() => "");
-    console.log("text", text);
+
     throw new Error(text || "Failed to change password");
   }
 
